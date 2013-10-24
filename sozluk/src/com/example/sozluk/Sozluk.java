@@ -58,9 +58,12 @@ public class Sozluk extends Activity {
 			
 			@Override
 			public void run() {
+				int attemp=0;
 				// TODO Auto-generated method stub
-				while(!checkConnection(getApplicationContext())){
+				while(!checkConnection(getApplicationContext()) || !returned){
 					if(returned){
+						  if(attemp==3)
+							  break;
 						runOnUiThread(new Runnable() { 
 							
 							@Override
@@ -68,13 +71,28 @@ public class Sozluk extends Activity {
 								// TODO Auto-generated method stub
 								Toast.makeText(ctx, "Bağlantı Yok", Toast.LENGTH_SHORT).show();
 							}
+							
 						});
-					
+						
 					  startActivityForResult(new Intent(Settings.ACTION_WIFI_SETTINGS),requestCode);
 					  returned=false;
+					  attemp++;
 					
 					}
 				}
+				if(attemp==3){
+					runOnUiThread(new Runnable() { 
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							Toast.makeText(ctx, "Uygulamanın çalışması için internet gerekli!", Toast.LENGTH_SHORT).show();
+						}
+						
+					});
+					
+				}
+				
 				
 			}
 		});
